@@ -176,4 +176,36 @@ public class LibraryTest {
 		Book bookTest2 = new Book("Harry Potter", "J.K. Rowling", new ISBN(46578964513l));
 		assertEquals(bookTest1, bookTest2);
 	}
+
+	@Test
+	public void students_members_have_debts_if_they_have_not_sufficient_wallet() {
+		Member studentTest = new Student("10", "Momar", "Diene");
+		studentTest.setWallet(0);	// wallet contains 0 euro
+		studentTest.payBook(31);	// 30 days cost 3.0 + 0.15 for the first taxed day
+		assertEquals(3.15f, studentTest.getDebt(), 0f);
+	}
+
+	@Test
+	public void students_members_paid_correctly_if_they_have_sufficient_wallet(){
+		Member studentTest = new Student();
+		studentTest.setWallet(20);	// wallet contains 20 euros
+		library.returnBook(library.borrowBook(46578964513l, studentTest, LocalDate.now().minusDays(20)), studentTest);
+		assertEquals(18f, studentTest.getWallet(), 0f);
+	}
+
+	@Test
+	public void residents_members_have_debts_if_they_have_not_sufficient_wallet() {
+		Member residentTest1 = new Resident("10", "Momar", "Diene");
+		residentTest1.setWallet(5);	// wallet contains 5 euro
+		residentTest1.payBook(65);
+		assertTrue(residentTest1.haveDebts());
+	}
+
+	@Test
+	public void residents_members_paid_correctly_if_they_have_sufficient_wallet(){
+		Member residentTest1 = new Resident("10", "Momar", "Diene");
+		residentTest1.setWallet(20);	// wallet contains 20 euros
+		library.returnBook(library.borrowBook(46578964513l, residentTest1, LocalDate.now().minusDays(20)), residentTest1);
+		assertEquals(18f, residentTest1.getWallet(), 0f);
+	}
 }

@@ -46,6 +46,7 @@ public class LibraryImpl implements Library{
 
 	@Override
 	public void returnBook(Book book, Member member) {
+		member.payBook(bookRepository.getBorrowedBooks().get(book).until(LocalDate.now()).getDays());
 		List<Book> list = new ArrayList<>();
 		list.add(book);
 		bookRepository.addBooks(list);

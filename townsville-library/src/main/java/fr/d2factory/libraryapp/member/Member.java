@@ -16,6 +16,11 @@ public abstract class Member {
      */
     private float wallet;
 
+	/**
+	 * A sum of money the member has to pay before borrowing a new book
+	 */
+	private float debt;
+
     /**
      * An initial state to show if the member is late in giving back his books
      */
@@ -135,5 +140,17 @@ public abstract class Member {
 		if (Float.floatToIntBits(wallet) != Float.floatToIntBits(other.wallet))
 			return false;
 		return true;
+	}
+
+	public boolean haveDebts() {
+		return debt > 0;
+	}
+
+	public float getDebt() {
+		return debt;
+	}
+
+	public void setDebt(float debt) {
+		this.debt = debt;
 	}
 }

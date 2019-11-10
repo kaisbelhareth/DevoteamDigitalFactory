@@ -37,8 +37,12 @@ public class Student extends Member{
 				amount += bookChargeAfterLateStudent;
 			}
 		}
-		if (this.getWallet() > amount) {
+		if (this.getWallet() >= amount) {
 			this.setWallet(this.getWallet() - amount);
+		}
+		else {
+			this.setDebt(amount - this.getWallet());
+			this.setWallet(0);
 		}
 	}
 }
