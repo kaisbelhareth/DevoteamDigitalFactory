@@ -32,8 +32,10 @@ public class LibraryImpl implements Library{
 	}
 		
 	@Override
-	public Book borrowBook(long isbnCode, Member member, LocalDate borrowedAt) throws  HasLateBooksException {
-		isMemberLate(member);		
+	public Book borrowBook(long isbnCode, Member member, LocalDate borrowedAt) throws  HasDebtException, HasLateBooksException {
+		if (member.haveDebts())
+			throw new hasDebtException();
+		isMemberLate(member);
 		Book bookToBorrow = bookRepository.findBook(isbnCode);
 		if(member.isLate()) {
 			throw new HasLateBooksException();
@@ -46,6 +48,7 @@ public class LibraryImpl implements Library{
 
 	@Override
 	public void returnBook(Book book, Member member) {
+		member.payBook(bookRepository.getBorrowedBooks().get(book).until(LocalDate.now()).getDays());
 		List<Book> list = new ArrayList<>();
 		list.add(book);
 		bookRepository.addBooks(list);
