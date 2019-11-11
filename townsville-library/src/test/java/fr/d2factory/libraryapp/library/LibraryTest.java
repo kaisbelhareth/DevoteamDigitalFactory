@@ -208,4 +208,13 @@ public class LibraryTest {
 		library.returnBook(library.borrowBook(46578964513l, residentTest1, LocalDate.now().minusDays(20)), residentTest1);
 		assertEquals(18f, residentTest1.getWallet(), 0f);
 	}
+
+	//this test must send a HasDebtException
+	@Test(expected=HasDebtException.class)
+	public void members_cannot_borrow_book_if_they_have_debts() {
+		Member residentTest = new Resident("10", "Momar", "Diene");
+		residentTest.setDebt(5f);
+		// resident has debts and tries to rent a book today
+		library.borrowBook(46578964513l, residentTest, LocalDate.now());
+	}
 }
